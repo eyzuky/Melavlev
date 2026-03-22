@@ -8,9 +8,9 @@ import AdminProjects from './admin/AdminProjects';
 import AdminImages from './admin/AdminImages';
 
 const navItems = [
-  { path: 'content', label: 'תוכן', icon: FileText },
-  { path: 'projects', label: 'פרויקטים', icon: FolderOpen },
-  { path: 'images', label: 'תמונות', icon: Image },
+  { path: '/admin/content', label: 'תוכן', icon: FileText },
+  { path: '/admin/projects', label: 'פרויקטים', icon: FolderOpen },
+  { path: '/admin/images', label: 'תמונות', icon: Image },
 ];
 
 export default function Admin() {
@@ -102,7 +102,7 @@ export default function Admin() {
         overflowY: 'auto', maxHeight: '100vh',
       }}>
         <Routes>
-          <Route index element={<Navigate to="content" replace />} />
+          <Route index element={<Navigate to="/admin/content" replace />} />
           <Route path="content" element={<AdminContent />} />
           <Route path="projects" element={<AdminProjects />} />
           <Route path="images" element={<AdminImages />} />
