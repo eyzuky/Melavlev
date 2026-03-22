@@ -1,8 +1,6 @@
 import getDb from './lib/db.js';
 
-export const config = { runtime: 'edge' };
-
-export default async function handler(req) {
+export default async function handler(req, res) {
   try {
     const sql = getDb();
 
@@ -26,16 +24,9 @@ export default async function handler(req) {
       images: images.filter(img => img.project_id === p.id),
     }));
 
-    return new Response(JSON.stringify({ projects: projectsWithImages }), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 's-maxage=60, stale-while-revalidate=300',
-      },
-    });
+    res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=300');
+    return res.json({ projects: projectsWithImages });
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(500).json({ error: err.message });
   }
 }

@@ -1,31 +1,23 @@
 import getDb from '../lib/db.js';
 import { getSession } from '../lib/auth.js';
 
-export const config = { runtime: 'edge' };
-
-export default async function handler(req) {
-  const session = await getSession(req);
-  if (!session.valid) return new Response('Unauthorized', { status: 401 });
+export default async function handler(req, res) {
+  const session = getSession(req);
+  if (!session.valid) return res.status(401).send('Unauthorized');
 
   const sql = getDb();
 
   if (req.method === 'GET') {
-    const { searchParams } = new URL(req.url);
-    const tab = searchParams.get('tab') || 'site';
-
+    const tab = req.query.tab || 'site';
     const rows = await sql`
       SELECT key, value_he, value_en FROM content WHERE tab = ${tab} ORDER BY id ASC
     `;
-    return new Response(JSON.stringify({ entries: rows }), {
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.json({ entries: rows });
   }
 
   if (req.method === 'PUT') {
-    const { tab, entries } = await req.json();
-    if (!tab || !entries) {
-      return new Response(JSON.stringify({ error: 'tab and entries required' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
-    }
+    const { tab, entries } = req.body;
+    if (!tab || !entries) return res.status(400).json({ error: 'tab and entries required' });
 
     for (const { key, value_he, value_en } of entries) {
       await sql`
@@ -37,11 +29,8 @@ export default async function handler(req) {
           updated_at = NOW()
       `;
     }
-
-    return new Response(JSON.stringify({ ok: true }), {
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.json({ ok: true });
   }
 
-  return new Response('Method not allowed', { status: 405 });
+  return res.status(405).send('Method not allowed');
 }

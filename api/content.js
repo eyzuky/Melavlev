@@ -1,10 +1,7 @@
 import getDb from './lib/db.js';
 
-export const config = { runtime: 'edge' };
-
-export default async function handler(req) {
-  const { searchParams } = new URL(req.url);
-  const tab = searchParams.get('tab') || 'site';
+export default async function handler(req, res) {
+  const tab = req.query.tab || 'site';
 
   try {
     const sql = getDb();
@@ -24,12 +21,8 @@ export default async function handler(req) {
           en: row.alt_en || row.alt_he || '',
         };
       }
-      return new Response(JSON.stringify(content), {
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 's-maxage=60, stale-while-revalidate=300',
-        },
-      });
+      res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=300');
+      return res.json(content);
     }
 
     const rows = await sql`
@@ -46,16 +39,9 @@ export default async function handler(req) {
       };
     }
 
-    return new Response(JSON.stringify(content), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 's-maxage=60, stale-while-revalidate=300',
-      },
-    });
+    res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=300');
+    return res.json(content);
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(500).json({ error: err.message });
   }
 }

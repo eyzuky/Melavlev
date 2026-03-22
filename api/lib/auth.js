@@ -1,44 +1,36 @@
+import crypto from 'crypto';
+
 const COOKIE_NAME = 'admin_session';
 const MAX_AGE = 86400; // 24 hours
 
-async function hmacSign(payload, secret) {
-  const enc = new TextEncoder();
-  const key = await crypto.subtle.importKey(
-    'raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
-  );
-  const data = enc.encode(JSON.stringify(payload));
-  const sig = await crypto.subtle.sign('HMAC', key, data);
-  const sigHex = Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2, '0')).join('');
-  const dataB64 = btoa(JSON.stringify(payload));
-  return `${dataB64}.${sigHex}`;
+function hmacSign(payload, secret) {
+  const data = JSON.stringify(payload);
+  const dataB64 = Buffer.from(data).toString('base64');
+  const sig = crypto.createHmac('sha256', secret).update(data).digest('hex');
+  return `${dataB64}.${sig}`;
 }
 
-async function hmacVerify(token, secret) {
+function hmacVerify(token, secret) {
   const [dataB64, sigHex] = token.split('.');
   if (!dataB64 || !sigHex) return null;
 
-  const enc = new TextEncoder();
-  const key = await crypto.subtle.importKey(
-    'raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']
-  );
+  const data = Buffer.from(dataB64, 'base64').toString();
+  const expectedSig = crypto.createHmac('sha256', secret).update(data).digest('hex');
 
-  const data = enc.encode(atob(dataB64));
-  const sig = new Uint8Array(sigHex.match(/.{2}/g).map(b => parseInt(b, 16)));
-  const valid = await crypto.subtle.verify('HMAC', key, sig, data);
-  if (!valid) return null;
+  if (!crypto.timingSafeEqual(Buffer.from(sigHex), Buffer.from(expectedSig))) return null;
 
-  const payload = JSON.parse(atob(dataB64));
+  const payload = JSON.parse(data);
   if (payload.exp && Date.now() > payload.exp) return null;
   return payload;
 }
 
-export async function signToken() {
+export function signToken() {
   const secret = process.env.ADMIN_SECRET;
   const payload = { exp: Date.now() + MAX_AGE * 1000 };
   return hmacSign(payload, secret);
 }
 
-export async function verifyToken(token) {
+export function verifyToken(token) {
   const secret = process.env.ADMIN_SECRET;
   return hmacVerify(token, secret);
 }
@@ -53,11 +45,15 @@ export function parseCookies(cookieHeader) {
   );
 }
 
-export async function getSession(req) {
-  const cookies = parseCookies(req.headers.get('cookie'));
+export function getSession(req) {
+  // Support both Node.js req (req.headers.cookie) and Web API Request (req.headers.get)
+  const cookieHeader = typeof req.headers.get === 'function'
+    ? req.headers.get('cookie')
+    : req.headers.cookie;
+  const cookies = parseCookies(cookieHeader);
   const token = cookies[COOKIE_NAME];
   if (!token) return { valid: false };
-  const payload = await verifyToken(token);
+  const payload = verifyToken(token);
   return { valid: !!payload };
 }
 
@@ -72,9 +68,9 @@ export function clearSessionCookieHeader() {
 export function checkPassword(input) {
   const expected = process.env.ADMIN_PASSWORD || '';
   if (input.length !== expected.length) return false;
-  let result = 0;
-  for (let i = 0; i < input.length; i++) {
-    result |= input.charCodeAt(i) ^ expected.charCodeAt(i);
+  try {
+    return crypto.timingSafeEqual(Buffer.from(input), Buffer.from(expected));
+  } catch {
+    return false;
   }
-  return result === 0;
 }
