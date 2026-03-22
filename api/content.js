@@ -1,41 +1,49 @@
+import getDb from './lib/db.js';
+
 export const config = { runtime: 'edge' };
 
 export default async function handler(req) {
   const { searchParams } = new URL(req.url);
   const tab = searchParams.get('tab') || 'site';
 
-  const apiKey = process.env.GOOGLE_API_KEY;
-  const sheetId = process.env.GOOGLE_SPREADSHEET_ID;
-
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${encodeURIComponent(tab)}?key=${apiKey}`;
-
   try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`Sheets API error: ${res.status}`);
-    const data = await res.json();
+    const sql = getDb();
 
-    const rows = data.values || [];
-    const content = {};
-    const isImagesTab = tab === 'images';
-
-    for (const row of rows) {
-      const key = row[0];
-      if (!key || key === 'key') continue;
-
-      if (isImagesTab) {
-        // images tab: key | drive_file_id | alt_text_he | alt_text_en
-        content[key] = {
-          fileId: row[1] || '',
-          he: row[2] || '',
-          en: row[3] || row[2] || '',
-        };
-      } else {
-        // standard tab: key | value_he | value_en
-        content[key] = {
-          he: row[1] || '',
-          en: row[2] || row[1] || '',
+    if (tab === 'images') {
+      const rows = await sql`
+        SELECT image_key, url, alt_he, alt_en
+        FROM images
+        WHERE image_key IS NOT NULL AND image_key != ''
+        ORDER BY sort_order ASC
+      `;
+      const content = {};
+      for (const row of rows) {
+        content[row.image_key] = {
+          url: row.url,
+          he: row.alt_he || '',
+          en: row.alt_en || row.alt_he || '',
         };
       }
+      return new Response(JSON.stringify(content), {
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 's-maxage=60, stale-while-revalidate=300',
+        },
+      });
+    }
+
+    const rows = await sql`
+      SELECT key, value_he, value_en
+      FROM content
+      WHERE tab = ${tab}
+    `;
+
+    const content = {};
+    for (const row of rows) {
+      content[row.key] = {
+        he: row.value_he || '',
+        en: row.value_en || row.value_he || '',
+      };
     }
 
     return new Response(JSON.stringify(content), {

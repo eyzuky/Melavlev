@@ -3,6 +3,10 @@ import { useLang } from '../context/LanguageContext';
 
 let imagesCache = null;
 
+export function clearImagesCache() {
+  imagesCache = null;
+}
+
 export function useImages() {
   const { lang } = useLang();
   const [images, setImages] = useState(imagesCache || {});
@@ -17,8 +21,12 @@ export function useImages() {
 
   const getImageUrl = (key) => {
     const entry = images[key];
-    if (!entry || !entry.fileId) return null;
-    return `/api/image?id=${entry.fileId}`;
+    if (!entry) return null;
+    // Direct URL from Vercel Blob (or any hosted URL)
+    if (entry.url) return entry.url;
+    // Legacy fallback: Google Drive proxy
+    if (entry.fileId) return `/api/image?id=${entry.fileId}`;
+    return null;
   };
 
   const getAltText = (key) => {

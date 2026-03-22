@@ -8,6 +8,7 @@ import WaveDivider from '../components/WaveDivider';
 import LeafAccent from '../components/LeafAccent';
 import CMSImage from '../components/CMSImage';
 import { useContent } from '../hooks/useContent';
+import { useProjects } from '../hooks/useProjects';
 import { useLang } from '../context/LanguageContext';
 import { useFadeUp } from '../hooks/useFadeUp';
 import { Phone } from 'lucide-react';
@@ -84,6 +85,7 @@ function useYouTubeBackground(lang) {
 export default function Home() {
   const { t } = useContent('home');
   const { lang } = useLang();
+  const { featured: featuredProject } = useProjects();
   const [showArrow, setShowArrow] = useState(true);
   const fadeRef1 = useFadeUp();
   const fadeRef2 = useFadeUp();
@@ -314,11 +316,11 @@ export default function Home() {
             <div className="md:w-3/5">
               <SectionTitle
                 label={t('featured_project_label', lang === 'he' ? 'פרויקט נבחר' : 'Featured Project')}
-                title={t('featured_project_title', lang === 'he' ? 'שורשים של תקווה — עוטף עזה' : 'Roots of Hope — Gaza Envelope')}
+                title={featuredProject?.title || t('featured_project_title', lang === 'he' ? 'שורשים של תקווה — עוטף עזה' : 'Roots of Hope — Gaza Envelope')}
                 light
               />
               <p style={{ color: 'rgba(255,255,255,0.8)', lineHeight: 1.8, marginBottom: '2rem' }}>
-                {t('featured_project_text', lang === 'he'
+                {featuredProject?.description || t('featured_project_text', lang === 'he'
                   ? 'לאחר אוקטובר 2023, הפצנו 20,000 ערכות נטיעה למשפחות בעוטף עזה — סמל של צמיחה מתוך השבר. היום, אנחנו מקימים מרכזי טבע בסופה ובעין השלושה: מקומות שמחזירים לאנשים תחושת שורש, שייכות ועתיד.'
                   : 'After October 2023, we distributed 20,000 planting kits to families in the Gaza Envelope — seeds, soil, and a small growing kit — with a simple promise: even when a home is destroyed, growth continues.'
                 )}
@@ -328,7 +330,13 @@ export default function Home() {
               </Link>
             </div>
             <div className="md:w-2/5">
-              <CMSImage imageKey="home_featured_project" alt={lang === 'he' ? 'פעילות קהילתית בעין השלושה' : 'Community activity in Ein HaShlosha'} aspectRatio="4/3" />
+              {featuredProject?.imageUrl ? (
+                <div style={{ aspectRatio: '4/3' }} className="rounded-lg overflow-hidden">
+                  <img src={featuredProject.imageUrl} alt={featuredProject.imageAlt || ''} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+              ) : (
+                <CMSImage imageKey="home_featured_project" alt={lang === 'he' ? 'פעילות קהילתית בעין השלושה' : 'Community activity in Ein HaShlosha'} aspectRatio="4/3" />
+              )}
             </div>
           </div>
         </div>

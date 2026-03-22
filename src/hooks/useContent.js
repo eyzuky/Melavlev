@@ -3,6 +3,14 @@ import { useLang } from '../context/LanguageContext';
 
 const cache = {};
 
+export function clearContentCache(tab) {
+  if (tab) {
+    delete cache[tab];
+  } else {
+    Object.keys(cache).forEach(k => delete cache[k]);
+  }
+}
+
 export function useContent(tab) {
   const { lang } = useLang();
   const [rawContent, setRawContent] = useState(cache[tab] || null);

@@ -3,12 +3,14 @@ import SectionTitle from '../components/SectionTitle';
 import StatCard from '../components/StatCard';
 import ProjectCard from '../components/ProjectCard';
 import { useContent } from '../hooks/useContent';
+import { useProjects } from '../hooks/useProjects';
 import { useLang } from '../context/LanguageContext';
 import { useFadeUp } from '../hooks/useFadeUp';
 
 export default function Impact() {
   const { t } = useContent('impact');
   const { lang } = useLang();
+  const { projects, loading: projectsLoading } = useProjects();
   const fadeRef1 = useFadeUp();
   const fadeRef2 = useFadeUp();
   const fadeRef3 = useFadeUp();
@@ -20,51 +22,43 @@ export default function Impact() {
     { number: '2', label: lang === 'he' ? 'קהילות שיקום' : 'Rehabilitation communities', desc: lang === 'he' ? 'פעילות' : 'active' },
   ];
 
-  const projects = [
+  // Fallback projects if DB is empty/unavailable
+  const displayProjects = projects.length > 0 ? projects : [
     {
-      title: t('project_1_title', lang === 'he' ? 'שורשים של תקווה — ערכות נטיעה לעוטף עזה' : 'Roots of Hope — Planting Kits for the Gaza Envelope'),
-      tags: [{ label: t('project_1_tag', lang === 'he' ? 'עוטף עזה' : 'Gaza Envelope'), color: 'clay' }],
-      description: t('project_1_text', lang === 'he'
+      title: lang === 'he' ? 'שורשים של תקווה — ערכות נטיעה לעוטף עזה' : 'Roots of Hope — Planting Kits for the Gaza Envelope',
+      tags: [{ label: lang === 'he' ? 'עוטף עזה' : 'Gaza Envelope', color: 'clay' }],
+      description: lang === 'he'
         ? 'אחרי אוקטובר 2023, הבנו שהתרומה הגדולה ביותר שנוכל לתת לקהילות שנפגעו אינה חומרית — אלא סמלית וחיונית גם יחד. הפצנו 20,000 ערכות נטיעה למשפחות בעוטף עזה — זרעים, עפר וכלי גידול קטן — עם הבטחה פשוטה: גם אם הבית נהרס, הצמיחה ממשיכה.'
-        : 'After October 2023, we understood that the greatest contribution we could make to affected communities was not material — but symbolic and vital both. We distributed 20,000 planting kits to families across the Gaza Envelope — seeds, soil, and a small growing kit — with a simple promise: even when a home is destroyed, growth continues.'
-      ),
-      results: t('project_1_results', lang === 'he'
-        ? '20,000 ערכות הופצו ל-15 יישובים|שיתוף פעולה עם 8 ארגונים מקומיים|סיקור ב-3 כלי תקשורת לאומיים'
-        : '20,000 kits distributed across 15 communities|Collaboration with 8 local organizations|Coverage in 3 national media outlets'
-      ).split('|'),
+        : 'After October 2023, we distributed 20,000 planting kits to families across the Gaza Envelope — seeds, soil, and a small growing kit — with a simple promise: even when a home is destroyed, growth continues.',
+      results: lang === 'he'
+        ? ['20,000 ערכות הופצו ל-15 יישובים', 'שיתוף פעולה עם 8 ארגונים מקומיים', 'סיקור ב-3 כלי תקשורת לאומיים']
+        : ['20,000 kits distributed across 15 communities', 'Collaboration with 8 local organizations', 'Coverage in 3 national media outlets'],
       imageKey: 'impact_project_1',
-      imageAlt: lang === 'he' ? 'חלוקת ערכות נטיעה לילדים בעוטף' : 'Distributing planting kits to children in the Envelope',
-      imageRight: true,
+      imageAlt: lang === 'he' ? 'חלוקת ערכות נטיעה לילדים בעוטף' : 'Distributing planting kits',
     },
     {
-      title: t('project_2_title', lang === 'he' ? 'מרכז הטבע לתקומת העוטף — עין השלושה' : 'Community Nature Center — Ein HaShlosha'),
-      tags: [{ label: t('project_2_tag', lang === 'he' ? 'עוטף עזה | שיקום פוסט-טראומה' : 'Gaza Envelope · Post-Trauma Rehabilitation'), color: 'sage' }],
-      description: t('project_2_text', lang === 'he'
-        ? 'בעין השלושה, קיבוץ שנפגע קשות ב-7 באוקטובר, הקמנו מרכז טבע קהילתי מותאם לשיקום פוסט-טראומטי. שבועות של שיפוץ, סידור שבילים, הרכבת חממה, ובנייה של מטבח חוץ — כל זאת יחד עם תושבי הקיבוץ עצמם. המרכז הפך למקום שבו אנשים חוזרים לגעת באדמה, לנשום, ולהרגיש ששורשים עמוקים יותר מן השבר.'
-        : 'In Ein HaShlosha, a kibbutz severely affected on October 7th, we established a community nature center adapted for post-traumatic rehabilitation. Weeks of renovation, laying paths, building a greenhouse, and constructing an outdoor kitchen — all together with the kibbutz residents themselves. The center became a place where people return to touch the earth, to breathe, and to feel that roots run deeper than destruction.'
-      ),
-      results: t('project_2_results', lang === 'he'
-        ? '6 ימי הקמה קהילתיים|80+ מתנדבים מרחבי הארץ|3 סדנאות גינון שבועיות פעילות'
-        : '6 community build days|80+ volunteers from across the country|3 active weekly gardening workshops'
-      ).split('|'),
+      title: lang === 'he' ? 'מרכז הטבע לתקומת העוטף — עין השלושה' : 'Community Nature Center — Ein HaShlosha',
+      tags: [{ label: lang === 'he' ? 'עוטף עזה | שיקום פוסט-טראומה' : 'Gaza Envelope · Post-Trauma Rehabilitation', color: 'sage' }],
+      description: lang === 'he'
+        ? 'בעין השלושה, קיבוץ שנפגע קשות ב-7 באוקטובר, הקמנו מרכז טבע קהילתי מותאם לשיקום פוסט-טראומטי.'
+        : 'In Ein HaShlosha, a kibbutz severely affected on October 7th, we established a community nature center adapted for post-traumatic rehabilitation.',
+      results: lang === 'he'
+        ? ['6 ימי הקמה קהילתיים', '80+ מתנדבים מרחבי הארץ', '3 סדנאות גינון שבועיות פעילות']
+        : ['6 community build days', '80+ volunteers from across the country', '3 active weekly gardening workshops'],
       imageKey: 'impact_project_2',
       imageAlt: lang === 'he' ? 'מרכז הטבע בעין השלושה' : 'Nature center in Ein HaShlosha',
-      imageRight: false,
     },
     {
-      title: t('project_3_title', lang === 'he' ? 'חקלאות מדברית — כפר סטודנטים, דימונה' : 'Desert Agriculture — Student Village, Dimona'),
-      tags: [{ label: t('project_3_tag', lang === 'he' ? 'חקלאות קהילתית | חינוך' : 'Community Agriculture · Education'), color: 'sage' }],
-      description: t('project_3_text', lang === 'he'
-        ? 'בלב המדבר, בכפר סטודנטים בדימונה, הקמנו מרכז חקלאות וטבע קהילתי. המרכז משלב חינוך סביבתי, גינון טיפולי וחקלאות בת קיימא — ומוכיח שגם בתנאי המדבר הקשביים, אפשר להצמיח קהילה ירוקה ופורחת.'
-        : 'In the heart of the desert, in a student village in Dimona, we established a community agriculture and nature center. The center integrates environmental education, therapeutic gardening, and sustainable agriculture — proving that even in harsh desert conditions, a green and flourishing community can grow.'
-      ),
-      results: t('project_3_results', lang === 'he'
-        ? '200 מ"ר של גינת ירקות פעילה|40 משפחות סטודנטים משתתפות|תוכנית חינוך סביבתי לבתי ספר בסביבה'
-        : '200 sqm active vegetable garden|40 student families participating|Environmental education program for surrounding schools'
-      ).split('|'),
+      title: lang === 'he' ? 'חקלאות מדברית — כפר סטודנטים, דימונה' : 'Desert Agriculture — Student Village, Dimona',
+      tags: [{ label: lang === 'he' ? 'חקלאות קהילתית | חינוך' : 'Community Agriculture · Education', color: 'sage' }],
+      description: lang === 'he'
+        ? 'בלב המדבר, בכפר סטודנטים בדימונה, הקמנו מרכז חקלאות וטבע קהילתי.'
+        : 'In the heart of the desert, in a student village in Dimona, we established a community agriculture and nature center.',
+      results: lang === 'he'
+        ? ['200 מ"ר של גינת ירקות פעילה', '40 משפחות סטודנטים משתתפות', 'תוכנית חינוך סביבתי לבתי ספר בסביבה']
+        : ['200 sqm active vegetable garden', '40 student families participating', 'Environmental education program for surrounding schools'],
       imageKey: 'impact_project_3',
-      imageAlt: lang === 'he' ? 'מרכז חקלאות בכפר סטודנטים דימונה' : 'Agriculture center in Student Village Dimona',
-      imageRight: true,
+      imageAlt: lang === 'he' ? 'מרכז חקלאות בכפר סטודנטים דימונה' : 'Agriculture center in Dimona',
     },
   ];
 
@@ -99,8 +93,18 @@ export default function Impact() {
             centered
           />
           <div className="flex flex-col gap-12">
-            {projects.map((p, i) => (
-              <ProjectCard key={i} {...p} />
+            {displayProjects.map((p, i) => (
+              <ProjectCard
+                key={p.id || i}
+                title={p.title}
+                tags={p.tags}
+                description={p.description}
+                results={p.results}
+                imageKey={p.imageKey}
+                imageUrl={p.imageUrl}
+                imageAlt={p.imageAlt}
+                imageRight={i % 2 === 0}
+              />
             ))}
           </div>
         </div>
