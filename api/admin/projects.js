@@ -1,6 +1,6 @@
-import getDb from '../lib/db.js';
-import { getSession } from '../lib/auth.js';
-import { requireJson, clampStr, clampInt } from '../lib/validate.js';
+import getDb from '../../lib/db.js';
+import { getSession } from '../../lib/auth.js';
+import { requireJson, clampStr, clampInt } from '../../lib/validate.js';
 
 const MAX_TEXT = 2000;
 const MAX_DESCRIPTION = 10000;

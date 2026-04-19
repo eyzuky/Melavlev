@@ -1,7 +1,7 @@
-import getDb from '../lib/db.js';
-import { getSession } from '../lib/auth.js';
+import getDb from '../../lib/db.js';
+import { getSession } from '../../lib/auth.js';
 import { del } from '@vercel/blob';
-import { requireJson, clampStr, clampInt } from '../lib/validate.js';
+import { requireJson, clampStr, clampInt } from '../../lib/validate.js';
 
 const ALLOWED_CATEGORIES = new Set(['general', 'project', 'hero', 'pillar', 'gallery', 'solution']);
 const CATEGORY_PATTERN = /^[a-z0-9_-]{1,30}$/i;

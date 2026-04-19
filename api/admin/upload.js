@@ -1,5 +1,5 @@
 import { put } from '@vercel/blob';
-import { getSession } from '../lib/auth.js';
+import { getSession } from '../../lib/auth.js';
 
 export const config = {
   api: { bodyParser: false },

@@ -1,6 +1,6 @@
-import getDb from '../lib/db.js';
-import { getSession } from '../lib/auth.js';
-import { requireJson, clampStr } from '../lib/validate.js';
+import getDb from '../../lib/db.js';
+import { getSession } from '../../lib/auth.js';
+import { requireJson, clampStr } from '../../lib/validate.js';
 
 const TAB_PATTERN = /^[a-z0-9_]{1,50}$/i;
 const KEY_PATTERN = /^[a-z0-9_]{1,200}$/i;
