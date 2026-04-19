@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import LeafAccent from '../../components/LeafAccent';
+import logoIcon from '../../assets/melavlev-icon.png';
 
 export default function AdminLogin({ onLogin }) {
   const [password, setPassword] = useState('');
@@ -40,7 +40,7 @@ export default function AdminLogin({ onLogin }) {
         textAlign: 'center',
       }}>
         <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
-          <LeafAccent size={48} />
+          <img src={logoIcon} alt="מלבלב" style={{ height: '72px', width: 'auto' }} />
         </div>
         <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: '1.75rem', marginBottom: '0.5rem' }}>
           ניהול מלבלב

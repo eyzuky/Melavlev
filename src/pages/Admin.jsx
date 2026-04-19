@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, NavLink, Navigate, useNavigate } from 'react-router-dom';
 import { FileText, FolderOpen, Image, Images, LogOut } from 'lucide-react';
-import LeafAccent from '../components/LeafAccent';
+import logoIcon from '../assets/melavlev-icon.png';
 import AdminLogin from './admin/AdminLogin';
 import AdminContent from './admin/AdminContent';
 import AdminProjects from './admin/AdminProjects';
@@ -50,15 +50,15 @@ export default function Admin() {
         width: '250px', background: 'var(--green-deep)', padding: '2rem 1.5rem',
         display: 'flex', flexDirection: 'column', flexShrink: 0,
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2.5rem', paddingBottom: '1.5rem', borderBottom: '1px solid rgba(200,221,208,0.2)' }}>
-          <LeafAccent size={28} />
-          <div>
-            <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: '1.25rem', color: 'var(--green-pale)' }}>
-              מלבלב
-            </div>
-            <div style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--green-sage)' }}>
-              ניהול תוכן
-            </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2.5rem', paddingBottom: '1.5rem', borderBottom: '1px solid rgba(200,221,208,0.2)' }}>
+          <div style={{
+            background: 'var(--white-pure)', borderRadius: '10px',
+            padding: '0.35rem', display: 'flex', alignItems: 'center',
+          }}>
+            <img src={logoIcon} alt="מלבלב" style={{ height: '40px', width: 'auto', display: 'block' }} />
+          </div>
+          <div style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--green-sage)' }}>
+            ניהול תוכן
           </div>
         </div>
 

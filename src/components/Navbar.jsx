@@ -4,7 +4,7 @@ import LanguageSwitcher from './LanguageSwitcher';
 import { useContent } from '../hooks/useContent';
 import { useLang } from '../context/LanguageContext';
 import { Menu, X } from 'lucide-react';
-import logoImage from '../assets/melavlev-logo.png';
+import logoIcon from '../assets/melavlev-icon.png';
 
 const navLinks = [
   { path: '/', key: 'nav_home', he: 'בית', en: 'Home' },
@@ -64,9 +64,9 @@ export default function Navbar() {
           }}
         >
           <img
-            src={logoImage}
+            src={logoIcon}
             alt={lang === 'he' ? 'מלבלב' : 'Melavlev'}
-            style={{ height: '64px', width: 'auto', display: 'block' }}
+            style={{ height: '56px', width: 'auto', display: 'block' }}
           />
         </Link>
 
