@@ -40,7 +40,7 @@ export default function StatCard({ number, label, description, light = false }) 
   return (
     <div ref={ref} className="text-center p-6">
       <div style={{
-        fontFamily: "'Cormorant Garamond', serif", fontWeight: 600,
+        fontFamily: "var(--font-display)", fontWeight: 600,
         fontSize: '3rem', lineHeight: 1.1,
         color: light ? 'white' : 'var(--color-clay)',
         animation: 'countUp 0.6s ease forwards',

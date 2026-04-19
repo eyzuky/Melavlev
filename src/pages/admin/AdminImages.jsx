@@ -6,6 +6,8 @@ const CATEGORIES = [
   { value: 'project', label: 'פרויקט' },
   { value: 'hero', label: 'דף הבית' },
   { value: 'pillar', label: 'עמוד מודל' },
+  { value: 'gallery', label: 'גלריה' },
+  { value: 'solution', label: 'פתרונות' },
 ];
 
 export default function AdminImages() {
@@ -102,7 +104,7 @@ export default function AdminImages() {
 
   return (
     <div>
-      <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600, fontSize: '1.75rem', marginBottom: '2rem' }}>
+      <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: '1.75rem', marginBottom: '2rem' }}>
         ניהול תמונות
       </h2>
 
@@ -277,7 +279,7 @@ const labelStyle = {
 const inputStyle = {
   width: '100%', padding: '0.5rem 0.75rem',
   border: '1.5px solid var(--green-pale)', borderRadius: '6px',
-  fontFamily: "'Jost', sans-serif", fontSize: '0.875rem',
+  fontFamily: "var(--font-body)", fontSize: '0.875rem',
   outline: 'none',
 };
 

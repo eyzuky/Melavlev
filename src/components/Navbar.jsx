@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import LeafAccent from './LeafAccent';
 import LanguageSwitcher from './LanguageSwitcher';
 import { useContent } from '../hooks/useContent';
 import { useLang } from '../context/LanguageContext';
 import { Menu, X } from 'lucide-react';
+import logoImage from '../assets/melavlev-logo.png';
 
 const navLinks = [
   { path: '/', key: 'nav_home', he: 'בית', en: 'Home' },
+  { path: '/about', key: 'nav_about', he: 'מי אנחנו', en: 'About Us' },
   { path: '/model', key: 'nav_model', he: 'המודל שלנו', en: 'Our Model' },
   { path: '/solutions', key: 'nav_solutions', he: 'פתרונות', en: 'Solutions' },
-  { path: '/impact', key: 'nav_impact', he: 'אימפקט', en: 'Impact' },
+  { path: '/projects', key: 'nav_projects', he: 'פרויקטים', en: 'Projects' },
+  { path: '/gallery', key: 'nav_gallery', he: 'גלריה', en: 'Gallery' },
   { path: '/contact', key: 'nav_contact', he: 'צור קשר', en: 'Contact Us' },
 ];
 
@@ -31,34 +33,61 @@ export default function Navbar() {
     setMenuOpen(false);
   }, [location]);
 
+  const isActive = (path) =>
+    path === '/' ? location.pathname === '/' : location.pathname.startsWith(path);
+
   return (
     <nav style={{
       position: 'sticky', top: 0, zIndex: 50,
-      background: scrolled ? 'var(--color-cream)' : 'transparent',
+      background: 'var(--color-cream)',
       boxShadow: scrolled ? '0 2px 20px rgba(30,51,40,0.08)' : 'none',
-      transition: 'background 0.3s, box-shadow 0.3s',
+      transition: 'box-shadow 0.3s',
     }}>
-      <div className="max-w-6xl mx-auto px-6" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '72px' }}>
+      <div
+        className="max-w-6xl mx-auto px-6"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr auto 1fr',
+          alignItems: 'center',
+          height: '88px',
+          gap: '1.5rem',
+        }}
+      >
         {/* Logo */}
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
-          <LeafAccent size={32} />
-          <span style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600, fontSize: '1.75rem', color: 'var(--color-clay)' }}>
-            מלבלב
-          </span>
+        <Link
+          to="/"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            textDecoration: 'none',
+            justifySelf: 'start',
+          }}
+        >
+          <img
+            src={logoImage}
+            alt={lang === 'he' ? 'מלבלב' : 'Melavlev'}
+            style={{ height: '64px', width: 'auto', display: 'block' }}
+          />
         </Link>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
+        {/* Desktop Nav — centered */}
+        <div
+          className="hidden md:flex items-center"
+          style={{ gap: '1.75rem', justifyContent: 'center' }}
+        >
           {navLinks.map(link => (
             <Link
               key={link.path}
               to={link.path}
               style={{
-                fontFamily: "'Jost', sans-serif", fontWeight: 500,
-                color: location.pathname === link.path ? 'var(--green-forest)' : 'var(--color-earth)',
-                borderBottom: location.pathname === link.path ? '2px solid var(--green-sage)' : '2px solid transparent',
+                fontFamily: 'var(--font-body)',
+                fontWeight: 700,
+                fontSize: '1rem',
+                color: isActive(link.path) ? 'var(--green-forest)' : 'var(--color-earth)',
+                borderBottom: isActive(link.path) ? '2px solid var(--green-sage)' : '2px solid transparent',
                 paddingBottom: '0.25rem',
                 transition: 'color 0.2s, border-color 0.2s',
+                whiteSpace: 'nowrap',
               }}
             >
               {t(link.key, lang === 'he' ? link.he : link.en)}
@@ -67,7 +96,10 @@ export default function Navbar() {
         </div>
 
         {/* Desktop Right Cluster */}
-        <div className="hidden md:flex items-center gap-4">
+        <div
+          className="hidden md:flex items-center"
+          style={{ gap: '1rem', justifySelf: 'end' }}
+        >
           <LanguageSwitcher />
           <Link to="/contact" className="btn-primary" style={{ padding: '0.5rem 1.25rem', fontSize: '0.9rem' }}>
             {t('nav_cta', lang === 'he' ? 'הקימו מרכז' : 'Partner With Us')}
@@ -78,7 +110,10 @@ export default function Navbar() {
         <button
           className="md:hidden"
           onClick={() => setMenuOpen(!menuOpen)}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.5rem' }}
+          style={{
+            background: 'none', border: 'none', cursor: 'pointer', padding: '0.5rem',
+            justifySelf: 'end', gridColumn: '3 / 4',
+          }}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
         >
           {menuOpen ? <X size={24} color="var(--color-earth)" /> : <Menu size={24} color="var(--color-earth)" />}
@@ -88,20 +123,21 @@ export default function Navbar() {
       {/* Mobile Overlay */}
       {menuOpen && (
         <div style={{
-          position: 'fixed', inset: 0, top: '72px',
+          position: 'fixed', inset: 0, top: '88px',
           background: 'var(--color-cream)',
           zIndex: 49,
           display: 'flex', flexDirection: 'column',
           padding: '2rem',
           gap: '1.5rem',
+          overflowY: 'auto',
         }}>
           {navLinks.map(link => (
             <Link
               key={link.path}
               to={link.path}
               style={{
-                fontFamily: "'Jost', sans-serif", fontWeight: 500, fontSize: '1.25rem',
-                color: location.pathname === link.path ? 'var(--green-forest)' : 'var(--color-earth)',
+                fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '1.25rem',
+                color: isActive(link.path) ? 'var(--green-forest)' : 'var(--color-earth)',
               }}
             >
               {t(link.key, lang === 'he' ? link.he : link.en)}

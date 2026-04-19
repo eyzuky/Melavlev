@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import SectionTitle from '../components/SectionTitle';
 import StatCard from '../components/StatCard';
 import ProjectCard from '../components/ProjectCard';
+import CMSImage from '../components/CMSImage';
 import { useContent } from '../hooks/useContent';
 import { useProjects } from '../hooks/useProjects';
 import { useLang } from '../context/LanguageContext';
@@ -64,11 +65,22 @@ export default function Impact() {
 
   return (
     <>
-      {/* Page Hero */}
-      <section style={{ background: 'var(--color-parchment)', minHeight: '40vh', display: 'flex', alignItems: 'center' }}>
-        <div className="max-w-6xl mx-auto px-6 py-16 md:py-24 text-center">
+      {/* Top hero image */}
+      <section style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
+        <div style={{ aspectRatio: '21/9', width: '100%', maxHeight: '60vh', overflow: 'hidden' }}>
+          <CMSImage
+            imageKey="projects_hero"
+            alt={lang === 'he' ? 'תמונת גיבור - הפרויקטים שלנו' : 'Our projects hero image'}
+            aspectRatio="21/9"
+          />
+        </div>
+      </section>
+
+      {/* Page Title */}
+      <section style={{ background: 'var(--color-parchment)', display: 'flex', alignItems: 'center' }}>
+        <div className="max-w-6xl mx-auto px-6 py-16 md:py-20 text-center">
           <SectionTitle
-            label={t('page_label', lang === 'he' ? 'האימפקט שלנו' : 'Our Impact')}
+            label={t('page_label', lang === 'he' ? 'הפרויקטים שלנו' : 'Our Projects')}
             title={t('page_title', lang === 'he' ? 'מה שנבנה לא נשכח' : 'What Is Built Is Not Forgotten')}
             subtitle={t('page_subtitle', lang === 'he' ? 'כל מרכז הוא סיפור. כאן הסיפורים שלנו.' : 'Every center is a story. Here are our stories.')}
             centered
@@ -103,6 +115,7 @@ export default function Impact() {
                 imageKey={p.imageKey}
                 imageUrl={p.imageUrl}
                 imageAlt={p.imageAlt}
+                videoUrl={p.videoUrl}
                 imageRight={i % 2 === 0}
               />
             ))}

@@ -4,6 +4,7 @@ import { Plus, Pencil, Trash2, Star, Save, X, Loader2 } from 'lucide-react';
 const emptyProject = {
   title_he: '', title_en: '', description_he: '', description_en: '',
   results_he: '', results_en: '', tags: '[]', sort_order: 0, is_featured: false,
+  video_url: '',
 };
 
 export default function AdminProjects() {
@@ -71,7 +72,7 @@ export default function AdminProjects() {
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
-        <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600, fontSize: '1.75rem' }}>
+        <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: '1.75rem' }}>
           ניהול פרויקטים
         </h2>
         <button onClick={handleNew} className="btn-primary" style={{ gap: '0.5rem' }}>
@@ -111,6 +112,12 @@ export default function AdminProjects() {
             <Field label="תוצאות (עברית, מופרדות ב-|)" value={editing.results_he} onChange={v => updateField('results_he', v)} dir="rtl" rows={2} />
             <Field label="Results (English, pipe-separated)" value={editing.results_en} onChange={v => updateField('results_en', v)} dir="ltr" rows={2} />
             <Field label='תגיות (JSON)' value={editing.tags} onChange={v => updateField('tags', v)} dir="ltr" rows={2} />
+            <Field
+              label='קישור לווידאו (YouTube / Vimeo / .mp4)'
+              value={editing.video_url || ''}
+              onChange={v => updateField('video_url', v)}
+              dir="ltr"
+            />
             <div>
               <label style={labelStyle}>סדר מיון</label>
               <input
@@ -186,7 +193,7 @@ const labelStyle = {
 const inputStyle = {
   width: '100%', padding: '0.5rem 0.75rem',
   border: '1.5px solid var(--green-pale)', borderRadius: '6px',
-  fontFamily: "'Jost', sans-serif", fontSize: '0.875rem',
+  fontFamily: "var(--font-body)", fontSize: '0.875rem',
   outline: 'none',
 };
 

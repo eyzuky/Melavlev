@@ -15,7 +15,7 @@ function AccordionItem({ title, children }) {
         style={{
           width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '1.25rem 0', border: 'none', background: 'none', cursor: 'pointer',
-          fontFamily: "'Jost', sans-serif", fontWeight: 700, fontSize: '1.05rem',
+          fontFamily: "var(--font-body)", fontWeight: 700, fontSize: '1.05rem',
           color: 'var(--color-earth)', textAlign: 'start',
         }}
       >
@@ -44,12 +44,12 @@ export default function Solutions() {
   const fadeRef5 = useFadeUp();
 
   const audiences = [
-    { icon: <Building2 size={28} />, key: 'audience_1', he_label: 'רשויות מקומיות', en_label: 'Local Authorities', he_text: 'הקמת מרחב קהילתי שמחזיר תושבים לחיי הקהילה', en_text: 'Establishing a community space that brings residents back to community life' },
-    { icon: <HeartPulse size={28} />, key: 'audience_2', he_label: 'מנהלי רווחה', en_label: 'Welfare Directors', he_text: 'מרחבים טיפוליים לנפגעי פוסט-טראומה וקשישים', en_text: 'Therapeutic spaces for PTSD survivors and senior citizens' },
-    { icon: <GraduationCap size={28} />, key: 'audience_3', he_label: 'מוסדות חינוך', en_label: 'Educational Institutions', he_text: 'גינות לימוד ומרכזי חינוך סביבתי לתלמידים', en_text: 'Learning gardens and environmental education centers for students' },
-    { icon: <Users size={28} />, key: 'audience_4', he_label: 'קהילות בשיקום', en_label: 'Rehabilitation Communities', he_text: 'כלי מרכזי בתוכניות שיקום קהילתי מקיפות', en_text: 'A central tool in comprehensive community rehabilitation programs' },
-    { icon: <Home size={28} />, key: 'audience_5', he_label: 'יישובי עוטף', en_label: 'Gaza Envelope Communities', he_text: 'שיקום מרחבי ציבוריים לקהילות שנפגעו', en_text: 'Restoring public spaces for communities affected by trauma' },
-    { icon: <Leaf size={28} />, key: 'audience_6', he_label: 'מרכזי רפואה ובריאות', en_label: 'Medical & Wellness Centers', he_text: 'גינות טיפוליות מונגשות לאוכלוסיות מיוחדות', en_text: 'Accessible therapeutic gardens for special populations' },
+    { icon: <Building2 size={28} />, key: 'audience_1', slug: 'local-authorities', he_label: 'רשויות מקומיות', en_label: 'Local Authorities', he_text: 'הקמת מרחב קהילתי שמחזיר תושבים לחיי הקהילה', en_text: 'Establishing a community space that brings residents back to community life' },
+    { icon: <HeartPulse size={28} />, key: 'audience_2', slug: 'welfare-directors', he_label: 'מנהלי רווחה', en_label: 'Welfare Directors', he_text: 'מרחבים טיפוליים לנפגעי פוסט-טראומה וקשישים', en_text: 'Therapeutic spaces for PTSD survivors and senior citizens' },
+    { icon: <GraduationCap size={28} />, key: 'audience_3', slug: 'educational-institutions', he_label: 'מוסדות חינוך', en_label: 'Educational Institutions', he_text: 'גינות לימוד ומרכזי חינוך סביבתי לתלמידים', en_text: 'Learning gardens and environmental education centers for students' },
+    { icon: <Users size={28} />, key: 'audience_4', slug: 'rehabilitation-communities', he_label: 'קהילות בשיקום', en_label: 'Rehabilitation Communities', he_text: 'כלי מרכזי בתוכניות שיקום קהילתי מקיפות', en_text: 'A central tool in comprehensive community rehabilitation programs' },
+    { icon: <Home size={28} />, key: 'audience_5', slug: 'gaza-envelope', he_label: 'יישובי עוטף', en_label: 'Gaza Envelope Communities', he_text: 'שיקום מרחבי ציבוריים לקהילות שנפגעו', en_text: 'Restoring public spaces for communities affected by trauma' },
+    { icon: <Leaf size={28} />, key: 'audience_6', slug: 'medical-wellness', he_label: 'מרכזי רפואה ובריאות', en_label: 'Medical & Wellness Centers', he_text: 'גינות טיפוליות מונגשות לאוכלוסיות מיוחדות', en_text: 'Accessible therapeutic gardens for special populations' },
   ];
 
   const services = [
@@ -90,7 +90,15 @@ export default function Solutions() {
           />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {audiences.map((a, i) => (
-              <div key={i} className="card" style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+              <Link
+                key={i}
+                to={`/solutions/${a.slug}`}
+                className="card"
+                style={{
+                  display: 'flex', gap: '1rem', alignItems: 'flex-start',
+                  textDecoration: 'none', color: 'inherit', cursor: 'pointer',
+                }}
+              >
                 <div style={{ color: 'var(--color-sage)', flexShrink: 0, marginTop: '0.25rem' }}>
                   {a.icon}
                 </div>
@@ -98,11 +106,14 @@ export default function Solutions() {
                   <h4 style={{ fontWeight: 700, marginBottom: '0.5rem' }}>
                     {t(`${a.key}_label`, lang === 'he' ? a.he_label : a.en_label)}
                   </h4>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>
                     {t(`${a.key}_text`, lang === 'he' ? a.he_text : a.en_text)}
                   </p>
+                  <span style={{ color: 'var(--color-clay)', fontWeight: 700, fontSize: '0.85rem' }}>
+                    {lang === 'he' ? 'קראו עוד ←' : 'Read more →'}
+                  </span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -135,7 +146,7 @@ export default function Solutions() {
           <div style={{
             display: 'flex', justifyContent: 'center', alignItems: 'center',
             gap: '2rem', flexWrap: 'wrap',
-            fontFamily: "'Jost', sans-serif", fontWeight: 500, fontSize: '1.1rem',
+            fontFamily: "var(--font-body)", fontWeight: 500, fontSize: '1.1rem',
             color: 'var(--text-secondary)',
           }}>
             {/* LOGO: יישוב סופה */}

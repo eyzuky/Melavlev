@@ -42,7 +42,7 @@ export default function AdminLogin({ onLogin }) {
         <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
           <LeafAccent size={48} />
         </div>
-        <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600, fontSize: '1.75rem', marginBottom: '0.5rem' }}>
+        <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: '1.75rem', marginBottom: '0.5rem' }}>
           ניהול מלבלב
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '2rem' }}>
@@ -57,7 +57,7 @@ export default function AdminLogin({ onLogin }) {
           style={{
             width: '100%', padding: '0.75rem 1rem',
             border: '1.5px solid var(--green-pale)', borderRadius: '8px',
-            fontFamily: "'Jost', sans-serif", fontSize: '1rem',
+            fontFamily: "var(--font-body)", fontSize: '1rem',
             outline: 'none', marginBottom: '1rem', textAlign: 'center',
           }}
           autoFocus

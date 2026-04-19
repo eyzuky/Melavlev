@@ -11,7 +11,7 @@ export default function CMSImage({ imageKey, alt, aspectRatio = '16/9', classNam
         className={`rounded-lg flex items-center justify-center ${className}`}
         aria-label={alt}
       >
-        <span style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', fontFamily: "'Jost', sans-serif" }}>
+        <span style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', fontFamily: "var(--font-body)" }}>
           {alt}
         </span>
       </div>

@@ -75,7 +75,7 @@ export default function ContactForm() {
         }}>
           <Check size={32} color="white" />
         </div>
-        <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600, fontSize: '1.5rem', marginBottom: '0.75rem' }}>
+        <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: '1.5rem', marginBottom: '0.75rem' }}>
           {t('form_success_title', lang === 'he' ? 'קיבלנו את פנייתכם!' : 'We received your message!')}
         </h3>
         <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
@@ -91,7 +91,7 @@ export default function ContactForm() {
   const inputStyle = (field) => ({
     width: '100%', padding: '0.75rem 1rem',
     border: `1.5px solid ${errors[field] ? '#E74C3C' : 'var(--green-pale)'}`,
-    borderRadius: '8px', fontFamily: "'Jost', sans-serif", fontSize: '1rem',
+    borderRadius: '8px', fontFamily: "var(--font-body)", fontSize: '1rem',
     transition: 'border-color 0.2s',
     outline: 'none', background: 'white',
   });

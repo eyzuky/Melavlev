@@ -2,7 +2,7 @@ export default function ProcessStep({ number, title, bullets = [], isLast = fals
   return (
     <div className="relative flex-1 p-6" style={{ minWidth: '250px' }}>
       <div style={{
-        position: 'absolute', top: '-1rem', fontFamily: "'Cormorant Garamond', serif",
+        position: 'absolute', top: '-1rem', fontFamily: "var(--font-display)",
         fontWeight: 600, fontSize: '6rem', lineHeight: 1,
         color: 'var(--color-clay)', opacity: 0.07,
       }}>
@@ -10,12 +10,12 @@ export default function ProcessStep({ number, title, bullets = [], isLast = fals
       </div>
       <div className="relative">
         <div style={{
-          fontFamily: "'Cormorant Garamond', serif", fontWeight: 600,
+          fontFamily: "var(--font-display)", fontWeight: 600,
           fontSize: '1.25rem', color: 'var(--color-clay)', marginBottom: '0.5rem',
         }}>
           {number}
         </div>
-        <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600, fontSize: '1.25rem', marginBottom: '1rem' }}>
+        <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: '1.25rem', marginBottom: '1rem' }}>
           {title}
         </h3>
         <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>

@@ -1,12 +1,15 @@
 import { useEffect } from 'react';
-import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { LanguageProvider, useLang } from './context/LanguageContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
+import About from './pages/About';
 import OurModel from './pages/OurModel';
 import Solutions from './pages/Solutions';
-import Impact from './pages/Impact';
+import SolutionDetail from './pages/SolutionDetail';
+import Projects from './pages/Impact';
+import Gallery from './pages/Gallery';
 import Contact from './pages/Contact';
 import Admin from './pages/Admin';
 
@@ -25,9 +28,13 @@ function PublicLayout() {
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
           <Route path="/model" element={<OurModel />} />
           <Route path="/solutions" element={<Solutions />} />
-          <Route path="/impact" element={<Impact />} />
+          <Route path="/solutions/:slug" element={<SolutionDetail />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/impact" element={<Navigate to="/projects" replace />} />
+          <Route path="/gallery" element={<Gallery />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
       </main>

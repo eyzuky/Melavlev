@@ -1,19 +1,22 @@
 import { Link } from 'react-router-dom';
-import LeafAccent from './LeafAccent';
 import { useContent } from '../hooks/useContent';
 import { useLang } from '../context/LanguageContext';
 import { Instagram, Facebook, Linkedin, Phone, Mail } from 'lucide-react';
+import logoImage from '../assets/melavlev-logo.png';
 
 export default function Footer() {
+  const { t: tNav } = useContent('nav');
   const { t } = useContent('site');
   const { lang } = useLang();
 
   const footerLinks = [
-    { path: '/', he: 'בית', en: 'Home' },
-    { path: '/model', he: 'המודל שלנו', en: 'Our Model' },
-    { path: '/solutions', he: 'פתרונות', en: 'Solutions' },
-    { path: '/impact', he: 'אימפקט', en: 'Impact' },
-    { path: '/contact', he: 'צור קשר', en: 'Contact Us' },
+    { path: '/', key: 'nav_home', he: 'בית', en: 'Home' },
+    { path: '/about', key: 'nav_about', he: 'מי אנחנו', en: 'About Us' },
+    { path: '/model', key: 'nav_model', he: 'המודל שלנו', en: 'Our Model' },
+    { path: '/solutions', key: 'nav_solutions', he: 'פתרונות', en: 'Solutions' },
+    { path: '/projects', key: 'nav_projects', he: 'פרויקטים', en: 'Projects' },
+    { path: '/gallery', key: 'nav_gallery', he: 'גלריה', en: 'Gallery' },
+    { path: '/contact', key: 'nav_contact', he: 'צור קשר', en: 'Contact Us' },
   ];
 
   return (
@@ -22,11 +25,16 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Col 1: Logo + tagline + social */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-              <LeafAccent size={28} />
-              <span style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600, fontSize: '1.5rem', color: 'var(--color-clay-light)' }}>
-                מלבלב
-              </span>
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', marginBottom: '1rem',
+              background: 'var(--white-pure)', borderRadius: '12px',
+              padding: '0.75rem 1rem', boxShadow: '0 2px 10px rgba(0,0,0,0.15)',
+            }}>
+              <img
+                src={logoImage}
+                alt={lang === 'he' ? 'מלבלב' : 'Melavlev'}
+                style={{ height: '72px', width: 'auto', display: 'block' }}
+              />
             </div>
             <p style={{ fontSize: '0.95rem', opacity: 0.8, marginBottom: '1.5rem', lineHeight: 1.7 }}>
               {t('footer_tagline', lang === 'he' ? 'מצמיחים קשרים, מחזירים קהילות לחיים.' : 'Growing connections, restoring communities to life.')}
@@ -46,13 +54,13 @@ export default function Footer() {
 
           {/* Col 2: Quick links */}
           <div>
-            <h4 style={{ fontFamily: "'Jost', sans-serif", fontWeight: 700, marginBottom: '1rem', color: 'white' }}>
+            <h4 style={{ fontFamily: 'var(--font-body)', fontWeight: 700, marginBottom: '1rem', color: 'white' }}>
               {lang === 'he' ? 'ניווט מהיר' : 'Quick Links'}
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {footerLinks.map(link => (
                 <Link key={link.path} to={link.path} style={{ color: '#E5DBCA', opacity: 0.8, transition: 'opacity 0.2s', fontSize: '0.95rem' }}>
-                  {lang === 'he' ? link.he : link.en}
+                  {tNav(link.key, lang === 'he' ? link.he : link.en)}
                 </Link>
               ))}
             </div>
@@ -60,7 +68,7 @@ export default function Footer() {
 
           {/* Col 3: Contact info */}
           <div>
-            <h4 style={{ fontFamily: "'Jost', sans-serif", fontWeight: 700, marginBottom: '1rem', color: 'white' }}>
+            <h4 style={{ fontFamily: 'var(--font-body)', fontWeight: 700, marginBottom: '1rem', color: 'white' }}>
               {lang === 'he' ? 'צור קשר' : 'Contact'}
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>

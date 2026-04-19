@@ -13,7 +13,7 @@ export default function LanguageSwitcher() {
         borderRadius: '6px',
         overflow: 'hidden',
         fontSize: '0.8rem',
-        fontFamily: "'Jost', sans-serif",
+        fontFamily: "var(--font-body)",
         fontWeight: 700,
       }}
     >

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { PenTool, Users, Heart, Sprout, Phone } from 'lucide-react';
+import { Phone } from 'lucide-react';
 import SectionTitle from '../components/SectionTitle';
 import CMSImage from '../components/CMSImage';
 import LeafAccent from '../components/LeafAccent';
@@ -17,8 +17,6 @@ export default function OurModel() {
 
   const pillars = [
     {
-      icon: <PenTool size={28} color="white" />,
-      bgColor: 'var(--color-sage-dark)',
       title: t('pillar_1_title', lang === 'he' ? 'עיצוב קהילתי מותאם אישית' : 'Custom-Tailored Community Design'),
       text: t('pillar_1_text', lang === 'he'
         ? 'ה-DNA שלנו כולל סטודיו תכנון מובנה. כל מרחב זוכה לתכנון מוקפד ולמתקנים ייחודיים התפורים בדיוק למידותיה ולצרכיה של הקהילה המקומית. אין שני מרכזים דומים — כי אין שתי קהילות דומות.'
@@ -28,8 +26,6 @@ export default function OurModel() {
       imageAlt: lang === 'he' ? 'תכנון אדריכלי של מרכז טבע' : 'Architectural planning of a nature center',
     },
     {
-      icon: <Users size={28} color="white" />,
-      bgColor: 'var(--color-clay)',
       title: t('pillar_2_title', lang === 'he' ? 'הקמה משותפת' : 'Co-Creation'),
       text: t('pillar_2_text', lang === 'he'
         ? 'הקהילה אינה רק קהל יעד, אלא שותפה מלאה. פיתוח המרחב נעשה יד ביד עם התושבים — משלב החזון והתכנון ועד לביצוע בשטח. ימי ההקמה המשותפים הם הלב הפועם של התהליך. הם הופכים את התושבים מצופים לשותפים, ומעניקים להם תחושת בעלות מלאה על המרחב.'
@@ -39,8 +35,6 @@ export default function OurModel() {
       imageAlt: lang === 'he' ? 'תושבים בונים ביחד ביום הקמה' : 'Residents building together on build day',
     },
     {
-      icon: <Heart size={28} color="white" />,
-      bgColor: 'var(--color-sage-dark)',
       title: t('pillar_3_title', lang === 'he' ? 'חוסן קהילתי' : 'Community Resilience'),
       text: t('pillar_3_text', lang === 'he'
         ? 'יצירת מרחבי מפגש שמחברים לטבע, מפיגים בדידות ומחזקים את הקשר בין התושבים. המרכזים שלנו מפתחים קשר בין-דורי — מקום שבו סבתא ונכד יכולים לגדל עגבנייה ביחד.'
@@ -50,8 +44,6 @@ export default function OurModel() {
       imageAlt: lang === 'he' ? 'קשישים וילדים גוננים יחד' : 'Seniors and children gardening together',
     },
     {
-      icon: <Sprout size={28} color="white" />,
-      bgColor: 'var(--color-clay)',
       title: t('pillar_4_title', lang === 'he' ? 'שיקום וצמיחה' : 'Rehabilitation & Growth'),
       text: t('pillar_4_text', lang === 'he'
         ? 'התמחות במרחבי טבע מונגשים המותאמים לנפגעי פוסט-טראומה (PTSD) ולבני הגיל השלישי. חקלאות קהילתית בת קיימא. למידה חווייתית. מרחבים שמחזירים תכלית ועתיד.'
@@ -85,16 +77,20 @@ export default function OurModel() {
 
   return (
     <>
-      {/* Page Hero */}
-      <section style={{ background: 'var(--color-parchment)', minHeight: '40vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
-        <div style={{
-          position: 'absolute', top: '-2rem', left: '-2rem', opacity: 0.08,
-        }}>
-          <svg width="320" height="320" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-            <path d="M8 32 C8 32 10 10 32 8 C32 8 20 20 8 32Z" fill="var(--color-sage-dark)" />
-          </svg>
+      {/* Top hero image */}
+      <section style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
+        <div style={{ aspectRatio: '21/9', width: '100%', maxHeight: '60vh', overflow: 'hidden' }}>
+          <CMSImage
+            imageKey="model_hero"
+            alt={lang === 'he' ? 'תמונת גיבור - המודל שלנו' : 'Our model hero image'}
+            aspectRatio="21/9"
+          />
         </div>
-        <div className="max-w-6xl mx-auto px-6 py-16 md:py-24 text-center relative">
+      </section>
+
+      {/* Page Title */}
+      <section style={{ background: 'var(--color-parchment)', display: 'flex', alignItems: 'center' }}>
+        <div className="max-w-6xl mx-auto px-6 py-16 md:py-20 text-center relative">
           <SectionTitle
             label={t('page_label', lang === 'he' ? 'המודל שלנו' : 'Our Model')}
             title={t('page_title', lang === 'he' ? 'הטבע כמרחב של ריפוי וחיבור' : 'Nature as a Space for Healing and Connection')}
@@ -114,7 +110,7 @@ export default function OurModel() {
         >
           <div style={{
             position: 'absolute', top: '-2rem', left: i % 2 === 0 ? 'auto' : '-1rem', right: i % 2 === 0 ? '-1rem' : 'auto',
-            fontFamily: "'Cormorant Garamond', serif", fontWeight: 600, fontSize: '12rem', lineHeight: 1,
+            fontFamily: "var(--font-display)", fontWeight: 600, fontSize: '12rem', lineHeight: 1,
             color: 'var(--color-earth)', opacity: 0.03,
           }}>
             {String(i + 1).padStart(2, '0')}
@@ -125,14 +121,7 @@ export default function OurModel() {
                 <CMSImage imageKey={p.imageKey} alt={p.imageAlt} aspectRatio="4/3" />
               </div>
               <div className="md:w-1/2">
-                <div style={{
-                  width: '56px', height: '56px', borderRadius: '50%',
-                  background: p.bgColor, display: 'flex',
-                  alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem',
-                }}>
-                  {p.icon}
-                </div>
-                <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600, fontSize: '1.75rem', marginBottom: '1rem' }}>
+                <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: '1.75rem', marginBottom: '1rem' }}>
                   {p.title}
                 </h3>
                 <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8 }}>
@@ -158,12 +147,12 @@ export default function OurModel() {
             {steps.map((s, i) => (
               <div key={i} className="relative p-6 text-center">
                 <div style={{
-                  fontFamily: "'Cormorant Garamond', serif", fontWeight: 600,
+                  fontFamily: "var(--font-display)", fontWeight: 600,
                   fontSize: '1.25rem', color: 'var(--color-clay-light)', marginBottom: '0.75rem',
                 }}>
                   {String(i + 1).padStart(2, '0')}
                 </div>
-                <h4 style={{ fontFamily: "'Jost', sans-serif", fontWeight: 700, fontSize: '1.1rem', marginBottom: '1rem', color: 'white' }}>
+                <h4 style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: '1.1rem', marginBottom: '1rem', color: 'white' }}>
                   {s.title}
                 </h4>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
@@ -183,7 +172,7 @@ export default function OurModel() {
       <section ref={fadeRef3} className="fade-up" style={{ background: 'var(--color-clay)', color: 'white', padding: '4rem 1.5rem' }}>
         <div className="max-w-3xl mx-auto text-center">
           <blockquote style={{
-            fontFamily: "'Cormorant Garamond', serif", fontWeight: 600,
+            fontFamily: "var(--font-display)", fontWeight: 600,
             fontSize: 'clamp(1.25rem, 3vw, 2rem)', lineHeight: 1.5,
           }}>
             {t('pull_quote', lang === 'he'

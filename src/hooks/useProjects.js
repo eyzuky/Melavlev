@@ -29,6 +29,7 @@ export function useProjects() {
     images: p.images || [],
     imageUrl: p.images?.[0]?.url || null,
     imageAlt: lang === 'he' ? p.images?.[0]?.alt_he : p.images?.[0]?.alt_en,
+    videoUrl: p.video_url || null,
     is_featured: p.is_featured,
     sort_order: p.sort_order,
   }));

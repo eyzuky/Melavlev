@@ -44,7 +44,7 @@ export default function Contact() {
 
             {/* Sidebar */}
             <div className="md:w-2/5">
-              <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600, fontSize: '1.5rem', marginBottom: '1.5rem' }}>
+              <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: '1.5rem', marginBottom: '1.5rem' }}>
                 {t('sidebar_title', lang === 'he' ? 'דרכים נוספות לדבר איתנו' : 'Other Ways to Reach Us')}
               </h3>
 

@@ -6,7 +6,7 @@ export default async function handler(req, res) {
 
     const projects = await sql`
       SELECT id, title_he, title_en, description_he, description_en,
-             results_he, results_en, tags, sort_order, is_featured
+             results_he, results_en, tags, sort_order, is_featured, video_url
       FROM projects
       ORDER BY sort_order ASC
     `;

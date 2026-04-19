@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Leaf, Users, ShieldCheck } from 'lucide-react';
+import { Phone } from 'lucide-react';
 import SectionTitle from '../components/SectionTitle';
 import StatCard from '../components/StatCard';
 import ProcessStep from '../components/ProcessStep';
@@ -11,7 +11,6 @@ import { useContent } from '../hooks/useContent';
 import { useProjects } from '../hooks/useProjects';
 import { useLang } from '../context/LanguageContext';
 import { useFadeUp } from '../hooks/useFadeUp';
-import { Phone } from 'lucide-react';
 
 const HERO_VIDEOS = { he: 'RrRMSIMjiHU', en: 'cJpXspugizs' };
 
@@ -109,17 +108,17 @@ export default function Home() {
 
   const pillars = [
     {
-      icon: <Leaf size={32} color="white" />,
+      imageKey: 'home_pillar_1',
       title: t('pillar_1_title', lang === 'he' ? 'עיצוב קהילתי מותאם' : 'Custom-Tailored Community Design'),
       text: t('pillar_1_text', lang === 'he' ? 'כל מרחב זוכה לתכנון מוקפד התפור למידות ולצרכיה של הקהילה המקומית. הDNA שלנו כולל סטודיו תכנון מובנה.' : 'Our core DNA includes an in-house design studio. Every space receives meticulous planning and custom-made facilities, tailored precisely to the needs of the local community.'),
     },
     {
-      icon: <Users size={32} color="white" />,
+      imageKey: 'home_pillar_2',
       title: t('pillar_2_title', lang === 'he' ? 'הקמה משותפת' : 'Co-Creation'),
       text: t('pillar_2_text', lang === 'he' ? 'הקהילה אינה רק קהל יעד — אלא שותפה מלאה. פיתוח המרחב נעשה יד ביד עם התושבים, מהחזון ועד הביצוע.' : 'The community is not just a target audience — they are full partners. Development is done hand-in-hand with residents, from vision to execution.'),
     },
     {
-      icon: <ShieldCheck size={32} color="white" />,
+      imageKey: 'home_pillar_3',
       title: t('pillar_3_title', lang === 'he' ? 'שיקום וחוסן' : 'Rehabilitation & Resilience'),
       text: t('pillar_3_text', lang === 'he' ? 'התמחות במרחבי טבע מונגשים המותאמים לנפגעי פוסט-טראומה ולבני הגיל השלישי. מרחבים שמחזירים תקווה.' : 'Specializing in accessible nature spaces adapted for trauma (PTSD) survivors and senior citizens. Spaces that restore hope.'),
     },
@@ -152,13 +151,7 @@ export default function Home() {
   return (
     <>
       {/* Hero */}
-      <section style={{ position: 'relative', minHeight: 'calc(100vh - 72px)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: 'var(--green-deep)' }}>
-        {/* Gradient fallback behind video (shows while loading) */}
-        <div style={{
-          position: 'absolute', inset: 0, zIndex: 0,
-          background: 'linear-gradient(135deg, #1E3328 0%, #2D4A35 40%, #4A7055 70%, #1E3328 100%)',
-          animation: 'heroShift 12s ease-in-out infinite alternate',
-        }} />
+      <section style={{ position: 'relative', minHeight: 'calc(100vh - 88px)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: '#000' }}>
         {/* YouTube video background — hidden on mobile, shown on md+ */}
         <div
           ref={ytRef}
@@ -189,7 +182,7 @@ export default function Home() {
 
         <div style={{ position: 'relative', zIndex: 3, textAlign: 'center', maxWidth: '800px', padding: '2rem', width: '100%' }}>
           <span style={{
-            fontFamily: "'Jost', sans-serif", fontWeight: 700, fontSize: '0.75rem',
+            fontFamily: "var(--font-body)", fontWeight: 700, fontSize: '0.75rem',
             letterSpacing: '0.1em', textTransform: 'uppercase',
             color: 'rgba(255,255,255,0.7)', display: 'block', marginBottom: '1.5rem',
           }}>
@@ -197,7 +190,7 @@ export default function Home() {
           </span>
 
           <h1 style={{
-            fontFamily: "'Cormorant Garamond', serif", fontWeight: 300,
+            fontFamily: "var(--font-display)", fontWeight: 700,
             fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', color: 'white',
             lineHeight: 1.1, marginBottom: '1.5rem',
           }}>
@@ -264,20 +257,18 @@ export default function Home() {
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 stagger">
             {pillars.map((p, i) => (
-              <div key={i} className="card" style={{ borderTop: '4px solid var(--color-clay)' }}>
-                <div style={{
-                  width: '56px', height: '56px', borderRadius: '50%',
-                  background: 'var(--color-sage-dark)', display: 'flex',
-                  alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem',
-                }}>
-                  {p.icon}
-                </div>
-                <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600, fontSize: '1.5rem', marginBottom: '0.75rem' }}>
+              <div key={i} className="card" style={{ borderTop: '4px solid var(--color-clay)', padding: '1.5rem' }}>
+                <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: '1.5rem', marginBottom: '0.75rem' }}>
                   {p.title}
                 </h3>
-                <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7 }}>
+                <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '1.25rem' }}>
                   {p.text}
                 </p>
+                <CMSImage
+                  imageKey={p.imageKey}
+                  alt={p.title}
+                  aspectRatio="4/3"
+                />
               </div>
             ))}
           </div>
