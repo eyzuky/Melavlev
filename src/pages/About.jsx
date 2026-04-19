@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import SectionTitle from '../components/SectionTitle';
 import CMSImage from '../components/CMSImage';
-import LeafAccent from '../components/LeafAccent';
+import logoIcon from '../assets/melavlev-icon.png';
 import { useContent } from '../hooks/useContent';
 import { useLang } from '../context/LanguageContext';
 import { useFadeUp } from '../hooks/useFadeUp';
@@ -59,7 +59,7 @@ export default function About() {
       <section ref={fadeRef2} className="fade-up py-16 md:py-24" style={{ background: 'var(--color-parchment)' }}>
         <div className="max-w-xl mx-auto px-6 text-center">
           <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
-            <LeafAccent size={64} />
+            <img src={logoIcon} alt="מלבלב" style={{ height: '80px', width: 'auto' }} />
           </div>
           <h2 style={{ marginBottom: '1rem' }}>
             {t('cta_title', lang === 'he' ? 'רוצים להכיר אותנו?' : 'Want to get to know us?')}

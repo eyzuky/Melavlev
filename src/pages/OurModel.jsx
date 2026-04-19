@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Phone } from 'lucide-react';
 import SectionTitle from '../components/SectionTitle';
 import CMSImage from '../components/CMSImage';
-import LeafAccent from '../components/LeafAccent';
+import logoIcon from '../assets/melavlev-icon.png';
 import { useContent } from '../hooks/useContent';
 import { useLang } from '../context/LanguageContext';
 import { useFadeUp } from '../hooks/useFadeUp';
@@ -187,7 +187,7 @@ export default function OurModel() {
       <section ref={fadeRef4} className="fade-up py-16 md:py-24" style={{ background: 'var(--color-cream)' }}>
         <div className="max-w-xl mx-auto px-6 text-center">
           <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
-            <LeafAccent size={64} />
+            <img src={logoIcon} alt="מלבלב" style={{ height: '80px', width: 'auto' }} />
           </div>
           <h2 style={{ marginBottom: '1rem' }}>
             {lang === 'he' ? 'בואו נתחיל להצמיח משהו ביחד' : "Let's Start Growing Something Together"}

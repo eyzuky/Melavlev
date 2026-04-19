@@ -5,7 +5,7 @@ import SectionTitle from '../components/SectionTitle';
 import StatCard from '../components/StatCard';
 import ProcessStep from '../components/ProcessStep';
 import WaveDivider from '../components/WaveDivider';
-import LeafAccent from '../components/LeafAccent';
+import logoIcon from '../assets/melavlev-icon.png';
 import CMSImage from '../components/CMSImage';
 import { useContent } from '../hooks/useContent';
 import { useProjects } from '../hooks/useProjects';
@@ -340,7 +340,7 @@ export default function Home() {
       <section ref={fadeRef5} className="fade-up py-16 md:py-24" style={{ background: 'var(--color-cream)' }}>
         <div className="max-w-xl mx-auto px-6 text-center">
           <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
-            <LeafAccent size={64} />
+            <img src={logoIcon} alt="מלבלב" style={{ height: '80px', width: 'auto' }} />
           </div>
           <h2 style={{ marginBottom: '1rem' }}>
             {t('final_cta_title', lang === 'he' ? 'בואו נתחיל להצמיח משהו ביחד' : "Let's Start Growing Something Together")}
