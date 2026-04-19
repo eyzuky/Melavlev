@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Save, Loader2, Plus, Trash2 } from 'lucide-react';
+import { Save, Loader2 } from 'lucide-react';
 
 const TABS = [
   { key: 'site', label: 'אתר' },
@@ -13,7 +13,59 @@ const TABS = [
   { key: 'contact', label: 'צרו קשר' },
 ];
 
-const KEY_PATTERN = /^[a-z0-9_]+$/i;
+// Scaffolds — any key listed here that isn't already in the DB will be shown
+// with its default value so the client can edit it. Saving then persists it.
+// Keep this in sync with hardcoded fallbacks across pages/Navbar/Footer.
+const SCAFFOLDS = {
+  nav: {
+    nav_home:     ['בית', 'Home'],
+    nav_about:    ['מי אנחנו', 'About Us'],
+    nav_model:    ['המודל שלנו', 'Our Model'],
+    nav_solutions:['פתרונות', 'Solutions'],
+    nav_projects: ['פרויקטים', 'Projects'],
+    nav_gallery:  ['גלריה', 'Gallery'],
+    nav_contact:  ['צור קשר', 'Contact Us'],
+    nav_cta:      ['הקימו מרכז', 'Partner With Us'],
+  },
+  about: {
+    page_label: ['מי אנחנו', 'About Us'],
+    page_title: ['הסיפור שלנו', 'Our Story'],
+    about_p1: [
+      'מלבלב הוא ארגון חברתי שמקים מרכזי טבע קהילתיים ברחבי ישראל. אנחנו מאמינים שחיבור לטבע, לאדמה ולקהילה הוא מרכיב חיוני לחוסן אישי וקולקטיבי.',
+      'Melavlev is a social organization that establishes community nature centers across Israel. We believe that connection to nature, the land, and the community is a vital component of personal and collective resilience.',
+    ],
+    about_p2: [
+      'הצוות שלנו כולל אדריכלים, מתכננים, מנחי קבוצות ואנשי חינוך סביבתי, שכולם חולקים חזון אחד: ליצור מרחבים שמצמיחים קשרים.',
+      'Our team includes architects, planners, group facilitators, and environmental educators — all sharing one vision: to create spaces that grow connections.',
+    ],
+    about_p3: [
+      'כל פרויקט מתחיל בהקשבה לקהילה, נמשך בהקמה משותפת, וממשיך בליווי ארוך-טווח. אנחנו לא עוזבים כשהשתילים באדמה.',
+      "Every project starts by listening to the community, continues through joint construction, and is followed by long-term support. We don't leave when the saplings are in the ground.",
+    ],
+    cta_title: ['רוצים להכיר אותנו?', 'Want to get to know us?'],
+    cta_text: [
+      'נשמח לשיחה — כדי להבין איך הטבע והקהילה יכולים לצמוח אצלכם.',
+      "We'd love to chat — to understand how nature and community can grow in your area.",
+    ],
+  },
+  gallery: {
+    page_label: ['גלריה', 'Gallery'],
+    page_title: ['רגעים מהשטח', 'Moments from the Field'],
+    page_subtitle: [
+      'אוסף תמונות ממרכזי הטבע והקהילות שאנחנו מלווים.',
+      'A collection of images from the nature centers and communities we accompany.',
+    ],
+  },
+};
+
+function mergeWithScaffold(tab, dbEntries) {
+  const scaffold = SCAFFOLDS[tab] || {};
+  const existingKeys = new Set(dbEntries.map(e => e.key));
+  const scaffoldRows = Object.entries(scaffold)
+    .filter(([key]) => !existingKeys.has(key))
+    .map(([key, [he, en]]) => ({ key, value_he: he, value_en: en, __scaffold: true }));
+  return [...dbEntries, ...scaffoldRows];
+}
 
 export default function AdminContent() {
   const [activeTab, setActiveTab] = useState('site');
@@ -21,10 +73,6 @@ export default function AdminContent() {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState('');
-
-  const [newKey, setNewKey] = useState('');
-  const [newValueHe, setNewValueHe] = useState('');
-  const [newValueEn, setNewValueEn] = useState('');
 
   useEffect(() => {
     loadTab(activeTab);
@@ -35,9 +83,9 @@ export default function AdminContent() {
     try {
       const res = await fetch(`/api/admin/content?tab=${tab}`);
       const data = await res.json();
-      setEntries(data.entries || []);
+      setEntries(mergeWithScaffold(tab, data.entries || []));
     } catch {
-      setEntries([]);
+      setEntries(mergeWithScaffold(tab, []));
     } finally {
       setLoading(false);
     }
@@ -47,42 +95,20 @@ export default function AdminContent() {
     setEntries(prev => prev.map((e, i) => i === index ? { ...e, [field]: value } : e));
   };
 
-  const removeEntry = (index) => {
-    setEntries(prev => prev.filter((_, i) => i !== index));
-  };
-
   const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(''), 3000); };
-
-  const addEntry = () => {
-    const key = newKey.trim();
-    if (!key) {
-      showToast('חובה להזין מפתח');
-      return;
-    }
-    if (!KEY_PATTERN.test(key)) {
-      showToast('מפתח חייב להיות באותיות לטיניות / מספרים / _');
-      return;
-    }
-    if (entries.some(e => e.key === key)) {
-      showToast('מפתח כבר קיים');
-      return;
-    }
-    setEntries(prev => [...prev, { key, value_he: newValueHe, value_en: newValueEn }]);
-    setNewKey('');
-    setNewValueHe('');
-    setNewValueEn('');
-    showToast('פריט נוסף — לחצו "שמור שינויים"');
-  };
 
   const handleSave = async () => {
     setSaving(true);
     try {
+      // Strip the __scaffold marker before sending; the payload is just key + values.
+      const payload = entries.map(({ __scaffold, ...rest }) => rest);
       await fetch('/api/admin/content', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tab: activeTab, entries }),
+        body: JSON.stringify({ tab: activeTab, entries: payload }),
       });
       showToast('נשמר בהצלחה');
+      await loadTab(activeTab);
     } catch {
       showToast('שגיאה בשמירה');
     } finally {
@@ -133,53 +159,23 @@ export default function AdminContent() {
         </div>
       )}
 
-      {/* Add new entry */}
-      <div style={{
-        background: 'white', borderRadius: '12px', padding: '1.25rem',
-        border: '2px dashed var(--green-pale)', marginBottom: '1.5rem',
-      }}>
-        <h3 style={{ fontWeight: 700, marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <Plus size={16} /> הוספת פריט חדש בטאב "{TABS.find(t => t.key === activeTab)?.label}"
-        </h3>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 2fr auto', gap: '0.5rem', alignItems: 'end' }}>
-          <div>
-            <label style={labelStyle}>מפתח</label>
-            <input
-              value={newKey}
-              onChange={e => setNewKey(e.target.value)}
-              placeholder="e.g. nav_newtab"
-              style={inputStyle}
-              dir="ltr"
-            />
-          </div>
-          <div>
-            <label style={labelStyle}>עברית</label>
-            <input value={newValueHe} onChange={e => setNewValueHe(e.target.value)} style={inputStyle} dir="rtl" />
-          </div>
-          <div>
-            <label style={labelStyle}>English</label>
-            <input value={newValueEn} onChange={e => setNewValueEn(e.target.value)} style={inputStyle} dir="ltr" />
-          </div>
-          <button onClick={addEntry} className="btn-primary" style={{ gap: '0.5rem', padding: '0.5rem 1rem' }}>
-            <Plus size={14} /> הוסף
-          </button>
-        </div>
-      </div>
-
       {/* Entries */}
       {loading ? (
         <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>טוען...</div>
       ) : entries.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
-          אין עדיין פריטים בטאב הזה. הוסיפו פריט ראשון למעלה.
+          אין פריטים בטאב הזה.
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {entries.map((entry, i) => (
-            <div key={entry.key} style={{
-              background: 'white', borderRadius: '12px', padding: '1.25rem',
-              border: '1px solid var(--border-light)',
-            }}>
+            <div
+              key={entry.key}
+              style={{
+                background: 'white', borderRadius: '12px', padding: '1.25rem',
+                border: entry.__scaffold ? '1px dashed var(--green-sage)' : '1px solid var(--border-light)',
+              }}
+            >
               <div style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 marginBottom: '0.75rem',
@@ -187,16 +183,14 @@ export default function AdminContent() {
                 <div style={{ fontFamily: 'monospace', fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600 }}>
                   {entry.key}
                 </div>
-                <button
-                  onClick={() => removeEntry(i)}
-                  title="הסר מרשימת הפריטים (השמירה מעדכנת רק פריטים קיימים ואינה מוחקת)"
-                  style={{
-                    background: 'none', border: 'none', cursor: 'pointer',
-                    padding: '0.25rem', color: 'var(--text-muted)',
-                  }}
-                >
-                  <Trash2 size={14} />
-                </button>
+                {entry.__scaffold && (
+                  <span style={{
+                    fontSize: '0.65rem', fontWeight: 700, padding: '2px 8px', borderRadius: '999px',
+                    background: 'var(--green-blush)', color: 'var(--green-mid)', letterSpacing: '0.05em',
+                  }}>
+                    חדש — יישמר בלחיצה על "שמור"
+                  </span>
+                )}
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                 <div>
@@ -230,13 +224,6 @@ const labelStyle = {
   fontSize: '0.7rem', fontWeight: 700, color: 'var(--green-sage)',
   letterSpacing: '0.1em', textTransform: 'uppercase',
   display: 'block', marginBottom: '0.25rem',
-};
-
-const inputStyle = {
-  width: '100%', padding: '0.5rem 0.75rem',
-  border: '1.5px solid var(--green-pale)', borderRadius: '6px',
-  fontFamily: 'var(--font-body)', fontSize: '0.875rem',
-  outline: 'none',
 };
 
 const textareaStyle = {
