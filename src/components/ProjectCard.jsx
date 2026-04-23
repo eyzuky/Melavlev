@@ -29,9 +29,9 @@ export default function ProjectCard({ title, tags = [], description, results = [
   return (
     <div className="card p-0 overflow-hidden" style={{ border: '1px solid var(--color-linen)' }}>
       <div className={`flex flex-col ${imageRight ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
-        <div className="md:w-2/5">
+        <div className="md:w-2/5 overflow-hidden">
           {embedUrl ? (
-            <div style={{ aspectRatio }} className="h-full overflow-hidden">
+            <div style={{ aspectRatio }} className="w-full h-full overflow-hidden">
               <iframe
                 src={embedUrl}
                 title={imageAlt || title}
@@ -42,7 +42,7 @@ export default function ProjectCard({ title, tags = [], description, results = [
               />
             </div>
           ) : isDirectVideo ? (
-            <div style={{ aspectRatio }} className="h-full overflow-hidden">
+            <div style={{ aspectRatio }} className="w-full h-full overflow-hidden">
               <video
                 src={videoUrl}
                 controls
@@ -52,14 +52,14 @@ export default function ProjectCard({ title, tags = [], description, results = [
               />
             </div>
           ) : imageUrl ? (
-            <div style={{ aspectRatio }} className="h-full overflow-hidden">
+            <div style={{ aspectRatio }} className="w-full h-full overflow-hidden">
               <img src={imageUrl} alt={imageAlt} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
           ) : (
-            <CMSImage imageKey={imageKey} alt={imageAlt} aspectRatio={aspectRatio} className="h-full" />
+            <CMSImage imageKey={imageKey} alt={imageAlt} aspectRatio={aspectRatio} className="w-full h-full" />
           )}
         </div>
-        <div className="md:w-3/5 p-8" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center' }}>
+        <div className="md:w-3/5 p-8 min-w-0" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center' }}>
           <div className="flex flex-wrap gap-2 mb-4" style={{ justifyContent: 'center' }}>
             {tags.map((tag, i) => (
               <span key={i} style={{
